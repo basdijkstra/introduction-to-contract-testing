@@ -1,11 +1,13 @@
 package consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import au.com.dius.pact.consumer.*;
+import au.com.dius.pact.consumer.junit.PactProviderRule;
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.model.RequestResponsePact;
-import io.pactfoundation.consumer.dsl.LambdaDsl;
+import au.com.dius.pact.consumer.junit.PactVerification;
+import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.annotations.Pact;
+import au.com.dius.pact.consumer.dsl;
 import org.assertj.core.groups.Tuple;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
@@ -25,7 +27,6 @@ public class LocationServiceContractTest {
     private static final String COUNTRY = "United States";
     private static final String COUNTRY_ABBREVIATION = "US";
     private static final String PLACE_NAME = "Beverly Hills";
-    private static final String COUNTY = "Los Angeles";
     private static final String STATE = "California";
     private static final String STATE_ABBREVIATION = "WY";
 
@@ -33,7 +34,7 @@ public class LocationServiceContractTest {
     public static RandomPortRule randomPort = new RandomPortRule();
 
     @Rule
-    public PactProviderRuleMk2 provider = new PactProviderRuleMk2("zip_provider", null,
+    public PactProviderRule provider = new PactProviderRule("zip_provider", null,
             randomPort.getPort(), this);
 
     @Rule

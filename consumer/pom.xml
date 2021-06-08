@@ -40,10 +40,25 @@
 
     <dependency>
       <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-consumer</artifactId>
+      <version>${pact.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.dius</groupId>
       <artifactId>pact-jvm-consumer-junit</artifactId>
       <version>${pact.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-consumer-java8</artifactId>
+      <version>${pact.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
