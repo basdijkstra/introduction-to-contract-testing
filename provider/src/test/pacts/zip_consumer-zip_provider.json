@@ -1,136 +1,135 @@
 {
-    "provider": {
-        "name": "zip_provider"
-    },
-    "consumer": {
-        "name": "zip_consumer"
-    },
-    "interactions": [
+  "provider": {
+    "name": "zip_provider"
+  },
+  "consumer": {
+    "name": "zip_consumer"
+  },
+  "interactions": [
+    {
+      "description": "A request for location data",
+      "request": {
+        "method": "GET",
+        "path": "/us/99999"
+      },
+      "response": {
+        "status": 404
+      },
+      "providerStates": [
         {
-            "description": "A request for location data",
-            "request": {
-                "method": "GET",
-                "path": "/us/99999"
-            },
-            "response": {
-                "status": 404
-            },
-            "providerStates": [
-                {
-                    "name": "the zip code does not exist"
-                }
-            ]
+          "name": "the zip code does not exist"
+        }
+      ]
+    },
+    {
+      "description": "A request for location data",
+      "request": {
+        "method": "GET",
+        "path": "/us/90210"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
         },
+        "body": {
+          "zipCode": "90210",
+          "country": "United States",
+          "places": [
+            {
+              "stateAbbreviation": "CA",
+              "state": "California",
+              "placeName": "Beverly Hills"
+            }
+          ],
+          "countryAbbreviation": "US"
+        },
+        "matchingRules": {
+          "body": {
+            "$.zipCode": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.country": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.countryAbbreviation": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.places": {
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.places[*].placeName": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.places[*].state": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.places[*].stateAbbreviation": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
         {
-            "description": "A request for location data",
-            "request": {
-                "method": "GET",
-                "path": "/us/90210"
-            },
-            "response": {
-                "status": 200,
-                "headers": {
-                    "Content-Type": "application/json; charset=UTF-8"
-                },
-                "body": {
-                    "country": "United States",
-                    "countryAbbreviation": "US",
-                    "places": [
-                        {
-                            "placeName": "Beverly Hills",
-                            "state": "California",
-                            "stateAbbreviation": "WY"
-                        }
-                    ],
-                    "zipCode": "90210"
-                },
-                "matchingRules": {
-                    "body": {
-                        "$.zipCode": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.country": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.countryAbbreviation": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.places": {
-                            "matchers": [
-                                {
-                                    "match": "type",
-                                    "min": 1
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.places[*].placeName": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.places[*].state": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.places[*].stateAbbreviation": {
-                            "matchers": [
-                                {
-                                    "match": "regex",
-                                    "regex": "(WY|OK)"
-                                }
-                            ],
-                            "combine": "AND"
-                        }
-                    },
-                    "header": {
-                        "Content-Type": {
-                            "matchers": [
-                                {
-                                    "match": "regex",
-                                    "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                                }
-                            ],
-                            "combine": "AND"
-                        }
-                    }
-                }
-            },
-            "providerStates": [
-                {
-                    "name": "the zip code exists"
-                }
-            ]
+          "name": "the zip code exists"
         }
-    ],
-    "metadata": {
-        "pactSpecification": {
-            "version": "3.0.0"
-        },
-        "pact-jvm": {
-            "version": "3.5.24"
-        }
+      ]
     }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "4.0.10"
+    }
+  }
 }

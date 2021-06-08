@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider("zip_provider")
-//@PactFolder("src/test/pacts")
-@PactBroker(host = "ota.pact.dius.com.au", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
+@PactFolder("src/test/pacts")
+// @PactBroker(host = "ota.pact.dius.com.au", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ContractTest {
 
