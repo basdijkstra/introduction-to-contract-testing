@@ -7,7 +7,7 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit.PactVerification;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import au.com.dius.pact.consumer.dsl;
+import io.pactfoundation.consumer.dsl.LambdaDsl;
 import org.assertj.core.groups.Tuple;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
@@ -28,7 +28,7 @@ public class LocationServiceContractTest {
     private static final String COUNTRY_ABBREVIATION = "US";
     private static final String PLACE_NAME = "Beverly Hills";
     private static final String STATE = "California";
-    private static final String STATE_ABBREVIATION = "WY";
+    private static final String STATE_ABBREVIATION = "CA";
 
     @ClassRule
     public static RandomPortRule randomPort = new RandomPortRule();
@@ -54,7 +54,7 @@ public class LocationServiceContractTest {
                 .minArrayLike("places", 1, 1, place -> place
                         .stringType("placeName", PLACE_NAME)
                         .stringType("state", STATE)
-                        .stringMatcher("stateAbbreviation", "(WY|OK)", STATE_ABBREVIATION)
+                        .stringType("stateAbbreviation", STATE_ABBREVIATION)
                 )).build();
 
         return builder.given(

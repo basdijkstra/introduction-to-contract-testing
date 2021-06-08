@@ -3,7 +3,6 @@ package consumer;
 public class Place {
 
     private String placeName;
-    private String county;
     private String state;
     private String stateAbbreviation;
 
@@ -17,14 +16,6 @@ public class Place {
 
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
     }
 
     public String getState() {
