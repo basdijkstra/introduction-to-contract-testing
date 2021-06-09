@@ -1,135 +1,135 @@
 {
-  "provider": {
-    "name": "zip_provider"
-  },
   "consumer": {
     "name": "zip_consumer"
   },
   "interactions": [
     {
       "description": "A request for location data",
+      "providerStates": [
+        {
+          "name": "the zip code does not exist"
+        }
+      ],
       "request": {
         "method": "GET",
         "path": "/us/99999"
       },
       "response": {
         "status": 404
-      },
-      "providerStates": [
-        {
-          "name": "the zip code does not exist"
-        }
-      ]
+      }
     },
     {
       "description": "A request for location data",
+      "providerStates": [
+        {
+          "name": "the zip code exists"
+        }
+      ],
       "request": {
         "method": "GET",
         "path": "/us/90210"
       },
       "response": {
-        "status": 200,
+        "body": {
+          "country": "United States",
+          "countryAbbreviation": "US",
+          "places": [
+            {
+              "placeName": "Beverly Hills",
+              "state": "California",
+              "stateAbbreviation": "CA"
+            }
+          ],
+          "zipCode": "90210"
+        },
         "headers": {
           "Content-Type": "application/json; charset=UTF-8"
         },
-        "body": {
-          "zipCode": "90210",
-          "country": "United States",
-          "places": [
-            {
-              "stateAbbreviation": "CA",
-              "state": "California",
-              "placeName": "Beverly Hills"
-            }
-          ],
-          "countryAbbreviation": "US"
-        },
         "matchingRules": {
           "body": {
-            "$.zipCode": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
             "$.country": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.countryAbbreviation": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.places": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type",
                   "min": 1
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.places[*].placeName": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.places[*].state": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.places[*].stateAbbreviation": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
+            },
+            "$.zipCode": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
             }
           },
           "header": {
             "Content-Type": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "regex",
                   "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
                 }
-              ],
-              "combine": "AND"
+              ]
             }
           }
-        }
-      },
-      "providerStates": [
-        {
-          "name": "the zip code exists"
-        }
-      ]
+        },
+        "status": 200
+      }
     }
   ],
   "metadata": {
+    "pact-jvm": {
+      "version": "4.2.6"
+    },
     "pactSpecification": {
       "version": "3.0.0"
-    },
-    "pact-jvm": {
-      "version": "4.0.10"
     }
+  },
+  "provider": {
+    "name": "zip_provider"
   }
 }

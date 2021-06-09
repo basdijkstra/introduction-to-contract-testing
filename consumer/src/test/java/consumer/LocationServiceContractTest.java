@@ -1,16 +1,16 @@
 package consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import au.com.dius.pact.consumer.junit.PactProviderRule;
 import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.LambdaDsl;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit.PactVerification;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import io.pactfoundation.consumer.dsl.LambdaDsl;
 import org.assertj.core.groups.Tuple;
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,9 +36,6 @@ public class LocationServiceContractTest {
     @Rule
     public PactProviderRule provider = new PactProviderRule("zip_provider", null,
             randomPort.getPort(), this);
-
-    @Rule
-    public ExpectedException expandException = ExpectedException.none();
 
     @Autowired
     private LocationServiceClient locationServiceClient;
@@ -97,9 +94,10 @@ public class LocationServiceContractTest {
     @PactVerification(fragment = "pactForZipCodeDoesNotExist")
     @Test
     public void testFor_nonExistingZipCode_shouldYieldHttp404() {
-        expandException.expect(HttpClientErrorException.class);
-        expandException.expectMessage("404 Not Found");
 
-        locationServiceClient.getLocation("us", "99999");
+        assertThatThrownBy(
+                () -> locationServiceClient.getLocation("us", "99999")
+        ).isInstanceOf(HttpClientErrorException.class)
+                .hasMessageContaining("404 Not Found");
     }
 }
