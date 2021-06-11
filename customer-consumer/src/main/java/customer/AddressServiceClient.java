@@ -1,0 +1,23 @@
+package customer;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.UUID;
+
+@Component
+public class AddressServiceClient {
+
+    private final RestTemplate restTemplate;
+
+    public AddressServiceClient(@Value("${address_provider.base-url}") String baseUrl) {
+        this.restTemplate = new RestTemplateBuilder().rootUri(baseUrl).build();
+    }
+
+    public Address getAddress(String addressId) {
+        return restTemplate.getForObject(String.format("/address/%s", addressId), Address.class);
+    }
+}
