@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ontestautomation.cdct</groupId>
-  <artifactId>consumer</artifactId>
+  <artifactId>order-consumer</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <parent>
