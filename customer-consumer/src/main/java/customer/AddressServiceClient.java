@@ -11,7 +11,10 @@ public class AddressServiceClient {
     private final RestTemplate restTemplate;
 
     public AddressServiceClient(@Value("${address_provider.base-url}") String baseUrl) {
-        this.restTemplate = new RestTemplateBuilder().rootUri(baseUrl).build();
+        this.restTemplate = new RestTemplateBuilder()
+                .rootUri(baseUrl)
+                .defaultHeader("Connection", "close")
+                .build();
     }
 
     public Address getAddress(String addressId) {
