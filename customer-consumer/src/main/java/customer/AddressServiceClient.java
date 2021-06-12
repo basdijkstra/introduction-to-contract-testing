@@ -3,10 +3,7 @@ package customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.UUID;
 
 @Component
 public class AddressServiceClient {
@@ -19,5 +16,9 @@ public class AddressServiceClient {
 
     public Address getAddress(String addressId) {
         return restTemplate.getForObject(String.format("/address/%s", addressId), Address.class);
+    }
+
+    public void deleteAddress(String addressId) {
+        restTemplate.delete(String.format("/address/%s", addressId));
     }
 }

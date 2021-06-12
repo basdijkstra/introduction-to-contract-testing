@@ -22,7 +22,7 @@ import java.util.UUID;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
         properties = "address_provider.base-url:http://localhost:${RANDOM_PORT}",
         classes = AddressServiceClient.class)
-public class AddressServiceContractTest {
+public class AddressServiceGetContractTest {
 
     private static final UUID ID = UUID.fromString("8aed8fad-d554-4af8-abf5-a65830b49a5f");
     private static final String ADDRESS_TYPE = "billing";
@@ -45,7 +45,7 @@ public class AddressServiceContractTest {
 
 
     @Pact(consumer = "customer_consumer")
-    public RequestResponsePact pactForExistingAddress(PactDslWithProvider builder) {
+    public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {
 
         DslPart body = LambdaDsl.newJsonBody((o) -> o
                 .uuid("id", ID)
@@ -59,9 +59,9 @@ public class AddressServiceContractTest {
         ).build();
 
         return builder.given(
-                "the address ID matches an existing address")
+                "GET: the address ID matches an existing address")
                 .uponReceiving("A request for address data")
-                .path("/address/8aed8fad-d554-4af8-abf5-a65830b49a5f")
+                .path(String.format("/address/%s", ID))
                 .method("GET")
                 .willRespondWith()
                 .status(200)
@@ -70,10 +70,10 @@ public class AddressServiceContractTest {
     }
 
     @Pact(consumer = "customer_consumer")
-    public RequestResponsePact pactForNonExistentAddressId(PactDslWithProvider builder) {
+    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "the address ID does not match an existing address")
+                "GET: the address ID does not match an existing address")
                 .uponReceiving("A request for address data")
                 .path("/address/00000000-0000-0000-0000-000000000000")
                 .method("GET")
@@ -83,10 +83,10 @@ public class AddressServiceContractTest {
     }
 
     @Pact(consumer = "customer_consumer")
-    public RequestResponsePact pactForIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
+    public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "the address ID is incorrectly formatted")
+                "GET: the address ID is incorrectly formatted")
                 .uponReceiving("A request for address data")
                 .path("/address/this_is_not_a_valid_address_id")
                 .method("GET")
@@ -95,7 +95,7 @@ public class AddressServiceContractTest {
                 .toPact();
     }
 
-    @PactVerification(fragment = "pactForExistingAddress")
+    @PactVerification(fragment = "pactForGetExistingAddressId")
     @Test
     public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData() {
 
@@ -111,7 +111,7 @@ public class AddressServiceContractTest {
         assertThat(address.getCountry()).isEqualTo(COUNTRY);
     }
 
-    @PactVerification(fragment = "pactForNonExistentAddressId")
+    @PactVerification(fragment = "pactForGetNonExistentAddressId")
     @Test
     public void testFor_GET_nonExistentAddressId_shouldYieldHttp404() {
 
@@ -121,7 +121,7 @@ public class AddressServiceContractTest {
                 .hasMessageContaining("404 Not Found");
     }
 
-    @PactVerification(fragment = "pactForIncorrectlyFormattedAddressId")
+    @PactVerification(fragment = "pactForGetIncorrectlyFormattedAddressId")
     @Test
     public void testFor_GET_incorrectlyFormattedAddressId_shouldYieldHttp400() {
 
