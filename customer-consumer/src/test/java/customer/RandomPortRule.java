@@ -1,4 +1,4 @@
-package consumer;
+package customer;
 
 import java.net.ServerSocket;
 import org.junit.rules.ExternalResource;
@@ -16,6 +16,6 @@ public class RandomPortRule extends ExternalResource {
     }
 
     public int getPort() {
-        return Integer.valueOf(System.getProperty(ENV_VARIABLE));
+        return Integer.parseInt(System.getProperty(ENV_VARIABLE));
     }
 }
