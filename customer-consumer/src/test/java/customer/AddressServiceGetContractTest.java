@@ -33,12 +33,9 @@ public class AddressServiceGetContractTest {
     private static final String STATE = "Tennessee";
     private static final String COUNTRY = "United States";
 
-    @ClassRule
-    public static RandomPortRule randomPort = new RandomPortRule();
-
     @Rule
     public PactProviderRule provider = new PactProviderRule("address_provider", null,
-            randomPort.getPort(), this);
+            RandomPort.getInstance().getPort(), this);
 
     @Autowired
     private AddressServiceClient addressServiceClient;
@@ -59,7 +56,7 @@ public class AddressServiceGetContractTest {
         ).build();
 
         return builder.given(
-                "GET: the address ID matches an existing address")
+                "Customer GET: the address ID matches an existing address")
                 .uponReceiving("A request for address data")
                 .path(String.format("/address/%s", ID))
                 .method("GET")
@@ -73,7 +70,7 @@ public class AddressServiceGetContractTest {
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "GET: the address ID does not match an existing address")
+                "Customer GET: the address ID does not match an existing address")
                 .uponReceiving("A request for address data")
                 .path("/address/00000000-0000-0000-0000-000000000000")
                 .method("GET")
@@ -86,7 +83,7 @@ public class AddressServiceGetContractTest {
     public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "GET: the address ID is incorrectly formatted")
+                "Customer GET: the address ID is incorrectly formatted")
                 .uponReceiving("A request for address data")
                 .path("/address/this_is_not_a_valid_address_id")
                 .method("GET")
