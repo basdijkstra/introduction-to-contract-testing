@@ -24,6 +24,7 @@
     <pact.version>4.2.6</pact.version>
     <pact.java8.version>4.1.22</pact.java8.version>
     <pact.maven.plugin.version>4.0.2</pact.maven.plugin.version>
+    <lombok.version>1.18.20</lombok.version>
   </properties>
 
 
@@ -58,6 +59,12 @@
       <artifactId>java8</artifactId>
       <version>${pact.java8.version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
     </dependency>
 
   </dependencies>

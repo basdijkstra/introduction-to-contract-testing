@@ -1,2 +1,2 @@
-zip_provider:
+address_provider:
   base-url: "http://localhost:8090"
