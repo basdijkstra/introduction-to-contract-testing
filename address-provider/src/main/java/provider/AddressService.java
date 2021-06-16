@@ -4,28 +4,28 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class LocationService {
+public class AddressService {
 
-    public Location findLocation(String countryCode, String zipCode) {
+    public Address getAddress(String addressId) {
 
-        Location location = new Location();
-        location.setZipCode(zipCode);
-        location.setCountry("United States");
-        location.setCountryAbbreviation(countryCode);
+        Address address = new Address();
 
-        List<Place> places = new ArrayList<>();
+        address.setId(UUID.fromString(addressId));
+        address.setAddressType("billing");
+        address.setStreet("Main Street");
+        address.setNumber(123);
+        address.setCity("Nothingville");
+        address.setZipCode(54321);
+        address.setState("Tennessee");
+        address.setCountry("United States");
 
-        Place place = new Place();
-        place.setPlaceName("Beverly Hills");
-        place.setState("California");
-        place.setStateAbbreviation("CA");
+        return address;
+    }
 
-        places.add(place);
+    public void deleteAddress(String addressId) {
 
-        location.setPlaces(places);
-
-        return location;
     }
 }

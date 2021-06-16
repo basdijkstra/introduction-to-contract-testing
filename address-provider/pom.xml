@@ -20,6 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>14</java.version>
         <pact.version>4.2.6</pact.version>
+        <lombok.version>1.18.20</lombok.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,13 @@
             <version>${pact.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
