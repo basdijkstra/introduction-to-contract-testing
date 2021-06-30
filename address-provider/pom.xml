@@ -19,7 +19,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>14</java.version>
-        <pact.version>4.2.6</pact.version>
+        <pact.version>4.2.7</pact.version>
+        <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
         <lombok.version>1.18.20</lombok.version>
     </properties>
 
@@ -32,6 +33,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
 
@@ -67,13 +82,16 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>au.com.dius</groupId>
+                <artifactId>pact-jvm-provider-maven</artifactId>
+                <version>${pact.maven.plugin.version}</version>
                 <configuration>
-                    <includes>
-                        <include>**/*ContractTest.java</include>
-                    </includes>
+                    <pactBrokerUrl>https://ota.pact.dius.com.au</pactBrokerUrl>
+                    <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>
+                    <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

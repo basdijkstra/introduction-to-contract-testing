@@ -21,9 +21,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>14</java.version>
-    <pact.version>4.2.6</pact.version>
-    <pact.java8.version>4.1.22</pact.java8.version>
-    <pact.maven.plugin.version>4.0.2</pact.maven.plugin.version>
+    <pact.version>4.2.7</pact.version>
+    <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
     <lombok.version>1.18.20</lombok.version>
   </properties>
 
@@ -41,6 +40,20 @@
     </dependency>
 
     <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.4.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>au.com.dius.pact</groupId>
       <artifactId>consumer</artifactId>
       <version>${pact.version}</version>
@@ -51,13 +64,6 @@
       <groupId>au.com.dius.pact.consumer</groupId>
       <artifactId>junit</artifactId>
       <version>${pact.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>au.com.dius.pact.consumer</groupId>
-      <artifactId>java8</artifactId>
-      <version>${pact.java8.version}</version>
       <scope>test</scope>
     </dependency>
 
