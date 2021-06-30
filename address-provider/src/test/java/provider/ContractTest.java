@@ -2,7 +2,8 @@ package provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.target.Target;
 import au.com.dius.pact.provider.junitsupport.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider("address_provider")
-@PactFolder("src/test/pacts")
+@PactBroker(url = "https://ota.pact.dius.com.au", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ContractTest {
 
