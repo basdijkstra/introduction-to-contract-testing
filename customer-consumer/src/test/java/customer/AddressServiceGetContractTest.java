@@ -28,6 +28,7 @@ public class AddressServiceGetContractTest {
     private static final String ADDRESS_TYPE = "billing";
     private static final String STREET = "Main Street";
     private static final int NUMBER = 123;
+    private static final int POBOX = 9876;
     private static final String CITY = "Nothingville";
     private static final int ZIP_CODE = 54321;
     private static final String STATE = "Tennessee";
@@ -49,6 +50,7 @@ public class AddressServiceGetContractTest {
                 .stringType("addressType", ADDRESS_TYPE)
                 .stringType("street", STREET)
                 .integerType("number", NUMBER)
+                .integerType("poBox", POBOX)
                 .stringType("city", CITY)
                 .integerType("zipCode", ZIP_CODE)
                 .stringType("state", STATE)
@@ -102,6 +104,7 @@ public class AddressServiceGetContractTest {
         assertThat(address.getAddressType()).isEqualTo(ADDRESS_TYPE);
         assertThat(address.getStreet()).isEqualTo(STREET);
         assertThat(address.getNumber()).isEqualTo(NUMBER);
+        assertThat(address.getPoBox()).isEqualTo(POBOX);
         assertThat(address.getCity()).isEqualTo(CITY);
         assertThat(address.getZipCode()).isEqualTo(ZIP_CODE);
         assertThat(address.getState()).isEqualTo(STATE);

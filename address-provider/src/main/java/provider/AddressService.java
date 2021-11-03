@@ -17,6 +17,7 @@ public class AddressService {
         address.setAddressType("billing");
         address.setStreet("Main Street");
         address.setNumber(123);
+        address.setPoBox(9876);
         address.setCity("Nothingville");
         address.setZipCode(54321);
         address.setState("Tennessee");

@@ -81,6 +81,7 @@
           "country": "United States",
           "id": "8aed8fad-d554-4af8-abf5-a65830b49a5f",
           "number": 123,
+          "poBox": 9876,
           "state": "Tennessee",
           "street": "Main Street",
           "zipCode": 54321
@@ -131,6 +132,14 @@
                 }
               ]
             },
+            "$.poBox": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
             "$.state": {
               "combine": "AND",
               "matchers": [
@@ -174,7 +183,7 @@
   ],
   "metadata": {
     "pact-jvm": {
-      "version": "4.2.6"
+      "version": "4.2.7"
     },
     "pactSpecification": {
       "version": "3.0.0"

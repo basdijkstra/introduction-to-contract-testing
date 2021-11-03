@@ -12,6 +12,7 @@ public class Address {
     private String addressType;
     private String street;
     private int number;
+    private int poBox;
     private String city;
     private int zipCode;
     private String state;
