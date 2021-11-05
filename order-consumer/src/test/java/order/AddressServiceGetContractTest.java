@@ -30,7 +30,7 @@ public class AddressServiceGetContractTest {
     private static final String STREET = "Main Street";
     private static final int NUMBER = 123;
     private static final String CITY = "Nothingville";
-    private static final int ZIP_CODE = 54321;
+    private static final String ZIP_CODE = "54321";
     private static final String STATE = "Tennessee";
     private static final String COUNTRY = "United States";
 
@@ -51,7 +51,7 @@ public class AddressServiceGetContractTest {
                 .stringType("street", STREET)
                 .integerType("number", NUMBER)
                 .stringType("city", CITY)
-                .integerType("zipCode", ZIP_CODE)
+                .stringType("zipCode", ZIP_CODE)
                 .stringType("state", STATE)
                 .stringType("country", COUNTRY)
         ).build();

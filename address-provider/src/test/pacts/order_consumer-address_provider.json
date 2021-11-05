@@ -83,7 +83,7 @@
           "number": 123,
           "state": "Tennessee",
           "street": "Main Street",
-          "zipCode": 54321
+          "zipCode": "54321"
         },
         "headers": {
           "Content-Type": "application/json; charset=UTF-8"
@@ -151,7 +151,7 @@
               "combine": "AND",
               "matchers": [
                 {
-                  "match": "integer"
+                  "match": "type"
                 }
               ]
             }
@@ -174,7 +174,7 @@
   ],
   "metadata": {
     "pact-jvm": {
-      "version": "4.2.6"
+      "version": "4.2.7"
     },
     "pactSpecification": {
       "version": "3.0.0"
