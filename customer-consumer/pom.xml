@@ -82,7 +82,7 @@
         <artifactId>pact-jvm-provider-maven</artifactId>
         <version>${pact.maven.plugin.version}</version>
         <configuration>
-          <pactBrokerUrl>https://ota.pact.dius.com.au</pactBrokerUrl>
+          <pactBrokerUrl>https://ota.pactflow.io</pactBrokerUrl>
           <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>
           <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
         </configuration>
