@@ -24,6 +24,9 @@
     <pact.version>4.2.7</pact.version>
     <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
     <lombok.version>1.18.20</lombok.version>
+    <gson.version>2.9.0</gson.version>
+    <wiremock.version>2.32.0</wiremock.version>
+    <wiremock.pact.generator.version>2.4.3</wiremock.pact.generator.version>
   </properties>
 
 
@@ -71,6 +74,26 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock-jre8</artifactId>
+      <version>${wiremock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.atlassian.ta</groupId>
+      <artifactId>wiremock-pact-generator</artifactId>
+      <version>${wiremock.pact.generator.version}</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>

@@ -1,131 +1,90 @@
 package order;
 
-import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.LambdaDsl;
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.consumer.junit.PactProviderRule;
-import au.com.dius.pact.consumer.junit.PactVerification;
-import au.com.dius.pact.core.model.RequestResponsePact;
-import au.com.dius.pact.core.model.annotations.Pact;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.atlassian.ta.wiremockpactgenerator.WireMockPactGenerator;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+
+import com.google.gson.Gson;
+import org.antlr.v4.runtime.atn.SemanticContext;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.UUID;
-
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-        properties = "address_provider.base-url:http://localhost:${RANDOM_PORT}",
-        classes = AddressServiceClient.class)
-public class PaymentServiceGetContractTest {
+import java.util.UUID;
 
-    private static final UUID ID = UUID.fromString("8aed8fad-d554-4af8-abf5-a65830b49a5f");
-    private static final String ADDRESS_TYPE = "billing";
-    private static final String STREET = "Main Street";
-    private static final int NUMBER = 123;
-    private static final String CITY = "Nothingville";
-    private static final int ZIP_CODE = 54321;
-    private static final String STATE = "Tennessee";
-    private static final String COUNTRY = "United States";
+@SpringBootTest
+@ContextConfiguration(initializers = { WireMockInitialiser.class })
+@TestInstance(Lifecycle.PER_CLASS)
+public class PaymentServiceClientTest {
 
-    @Rule
-    public PactProviderRule provider = new PactProviderRule("address_provider", null,
-            RandomPort.getInstance().getPort(), this);
+    private static final UUID ID = UUID.fromString("8383a7c3-f831-4f4d-a0a9-015165148af5");
+    private static final UUID ORDER_ID = UUID.fromString("228aa55c-393c-411b-9410-4a995480e78e");
+    private static final String STATUS = "payment_complete";
+    private static final int AMOUNT = 42;
+    private static final String DESCRIPTION = String.format("Payment for order %s", ORDER_ID);
 
     @Autowired
-    private AddressServiceClient addressServiceClient;
+    private WireMockServer wireMockServer;
 
+    @BeforeAll
+    void configureWiremockPactGenerator() {
 
-    @Pact(consumer = "order_consumer")
-    public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {
-
-        DslPart body = LambdaDsl.newJsonBody((o) -> o
-                .uuid("id", ID)
-                .stringType("addressType", ADDRESS_TYPE)
-                .stringType("street", STREET)
-                .integerType("number", NUMBER)
-                .stringType("city", CITY)
-                .integerType("zipCode", ZIP_CODE)
-                .stringType("state", STATE)
-                .stringType("country", COUNTRY)
-        ).build();
-
-        return builder.given(
-                "Order GET: the address ID matches an existing address")
-                .uponReceiving("A request for address data")
-                .path(String.format("/address/%s", ID))
-                .method("GET")
-                .willRespondWith()
-                .status(200)
-                .body(body)
-                .toPact();
+        wireMockServer.addMockServiceRequestListener(
+                WireMockPactGenerator
+                        .builder("order_consumer", "payment_provider")
+                        .build());
     }
 
-    @Pact(consumer = "order_consumer")
-    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
-
-        return builder.given(
-                "Order GET: the address ID does not match an existing address")
-                .uponReceiving("A request for address data")
-                .path("/address/00000000-0000-0000-0000-000000000000")
-                .method("GET")
-                .willRespondWith()
-                .status(404)
-                .toPact();
-    }
-
-    @Pact(consumer = "order_consumer")
-    public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
-
-        return builder.given(
-                "Order GET: the address ID is incorrectly formatted")
-                .uponReceiving("A request for address data")
-                .path("/address/this_is_not_a_valid_address_id")
-                .method("GET")
-                .willRespondWith()
-                .status(400)
-                .toPact();
-    }
-
-    @PactVerification(fragment = "pactForGetExistingAddressId")
     @Test
-    public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData() {
+    public void getPayment_validOrderId_shouldYieldExpectedPayment() {
 
-        final Address address = addressServiceClient.getAddress(ID.toString());
+        Payment payment = new Payment(ID, ORDER_ID, STATUS, AMOUNT, DESCRIPTION);
 
-        assertThat(address.getId()).isEqualTo(ID);
-        assertThat(address.getAddressType()).isEqualTo(ADDRESS_TYPE);
-        assertThat(address.getStreet()).isEqualTo(STREET);
-        assertThat(address.getNumber()).isEqualTo(NUMBER);
-        assertThat(address.getCity()).isEqualTo(CITY);
-        assertThat(address.getZipCode()).isEqualTo(ZIP_CODE);
-        assertThat(address.getState()).isEqualTo(STATE);
-        assertThat(address.getCountry()).isEqualTo(COUNTRY);
+        String paymentAsJson = new Gson().toJson(payment);
+
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(String.format("/payment/%s", ORDER_ID)))
+                .willReturn(aResponse().withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(paymentAsJson)));
+
+        Payment responsePayment = new PaymentServiceClient(wireMockServer.baseUrl()).getPaymentForOrder(ORDER_ID.toString());
+
+        assertThat(responsePayment.getId()).isEqualTo(ID);
+        assertThat(responsePayment.getOrderId()).isEqualTo(ORDER_ID);
+        assertThat(responsePayment.getStatus()).isEqualTo(STATUS);
+        assertThat(responsePayment.getAmount()).isEqualTo(AMOUNT);
+        assertThat(responsePayment.getDescription()).isEqualTo(DESCRIPTION);
     }
 
-    @PactVerification(fragment = "pactForGetNonExistentAddressId")
     @Test
-    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404() {
+    public void getPayment_nonexistentOrderId_shouldThrowException() {
+
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/payment/00000000-0000-0000-0000-000000000000"))
+                .willReturn(aResponse().withStatus(404)));
 
         assertThatThrownBy(
-                () -> addressServiceClient.getAddress("00000000-0000-0000-0000-000000000000")
+                () -> new PaymentServiceClient(wireMockServer.baseUrl()).getPaymentForOrder("00000000-0000-0000-0000-000000000000")
         ).isInstanceOf(HttpClientErrorException.class)
                 .hasMessageContaining("404 Not Found");
     }
 
-    @PactVerification(fragment = "pactForGetIncorrectlyFormattedAddressId")
     @Test
-    public void testFor_GET_incorrectlyFormattedAddressId_shouldYieldHttp400() {
+    public void getPayment_invalidOrderId_shouldThrowException() {
+
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/payment/this_is_not_a_valid_payment_id"))
+                .willReturn(aResponse().withStatus(400)));
 
         assertThatThrownBy(
-                () -> addressServiceClient.getAddress("this_is_not_a_valid_address_id")
+                () -> new PaymentServiceClient(wireMockServer.baseUrl()).getPaymentForOrder("this_is_not_a_valid_payment_id")
         ).isInstanceOf(HttpClientErrorException.class)
                 .hasMessageContaining("400 Bad Request");
     }

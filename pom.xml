@@ -12,5 +12,6 @@
 		<module>customer-consumer</module>
 		<module>order-consumer</module>
 		<module>address-provider</module>
+        <module>payment-provider</module>
 	</modules>	
 </project>
