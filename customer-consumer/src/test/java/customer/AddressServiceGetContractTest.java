@@ -25,13 +25,11 @@ import java.util.UUID;
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
 public class AddressServiceGetContractTest {
 
-    private static final UUID ID = UUID.fromString("8aed8fad-d554-4af8-abf5-a65830b49a5f");
-
     @Pact(provider = "address_provider", consumer = "customer_consumer")
     public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {
 
         DslPart body = LambdaDsl.newJsonBody((o) -> o
-                .uuid("id", ID)
+                .uuid("id", UUID.fromString(Address.VALID_EXISTING_ADDRESS_ID))
                 .stringType("addressType", "billing")
                 .stringType("street", "Main Street")
                 .integerType("number", 123)
@@ -44,7 +42,7 @@ public class AddressServiceGetContractTest {
         return builder.given(
                 "Customer GET: the address ID matches an existing address")
                 .uponReceiving("A request for address data")
-                .path(String.format("/address/%s", ID))
+                .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(200)
@@ -58,7 +56,7 @@ public class AddressServiceGetContractTest {
         return builder.given(
                 "Customer GET: the address ID does not match an existing address")
                 .uponReceiving("A request for address data")
-                .path("/address/00000000-0000-0000-0000-000000000000")
+                .path(String.format("/address/%s", Address.VALID_NON_EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(404)
@@ -71,7 +69,7 @@ public class AddressServiceGetContractTest {
         return builder.given(
                 "Customer GET: the address ID is incorrectly formatted")
                 .uponReceiving("A request for address data")
-                .path("/address/this_is_not_a_valid_address_id")
+                .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(400)
@@ -82,7 +80,10 @@ public class AddressServiceGetContractTest {
     @PactTestFor(pactMethod = "pactForGetExistingAddressId")
     public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) throws IOException {
 
-        HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/address/" + ID).execute().returnResponse();
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.VALID_EXISTING_ADDRESS_ID);
+
+        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
+
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
     }
 
@@ -90,7 +91,10 @@ public class AddressServiceGetContractTest {
     @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
     public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
 
-        HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/address/00000000-0000-0000-0000-000000000000").execute().returnResponse();
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.VALID_NON_EXISTING_ADDRESS_ID);
+
+        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
+
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));
     }
 
@@ -98,7 +102,10 @@ public class AddressServiceGetContractTest {
     @PactTestFor(pactMethod = "pactForGetIncorrectlyFormattedAddressId")
     public void testFor_GET_incorrectlyFormattedAddressId_shouldYieldHttp400(MockServer mockServer) throws IOException {
 
-        HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/address/this_is_not_a_valid_address_id").execute().returnResponse();
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.INVALID_ADDRESS_ID);
+
+        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
+
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }
 }
