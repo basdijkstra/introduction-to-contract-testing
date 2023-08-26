@@ -11,19 +11,20 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.0</version>
+    <version>3.1.3</version>
     <relativePath/>
   </parent>
 
   <properties>
-    <maven.compiler.source>14</maven.compiler.source>
-    <maven.compiler.target>14</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>14</java.version>
-    <pact.version>4.2.7</pact.version>
+    <java.version>17</java.version>
+    <junit.version>5.9.2</junit.version>
+    <pact.version>4.6.2</pact.version>
     <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
-    <lombok.version>1.18.20</lombok.version>
+    <lombok.version>1.18.28</lombok.version>
   </properties>
 
 
@@ -40,16 +41,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <version>5.4.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -62,8 +56,15 @@
 
     <dependency>
       <groupId>au.com.dius.pact.consumer</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit5</artifactId>
       <version>${pact.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-consumer-junit5</artifactId>
+      <version>${pact.maven.plugin.version}</version>
       <scope>test</scope>
     </dependency>
 
