@@ -21,7 +21,6 @@
         <java.version>17</java.version>
         <junit.version>5.9.2</junit.version>
         <pact.version>4.4.6</pact.version>
-        <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
         <lombok.version>1.18.28</lombok.version>
     </properties>
 
@@ -68,9 +67,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-maven</artifactId>
-                <version>${pact.maven.plugin.version}</version>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>${pact.version}</version>
                 <configuration>
                     <pactBrokerUrl>https://ota.pactflow.io</pactBrokerUrl>
                     <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>
