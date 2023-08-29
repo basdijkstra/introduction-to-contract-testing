@@ -4,40 +4,10 @@
   },
   "interactions": [
     {
-      "description": "A request to delete an address",
+      "description": "Retrieving a valid non-existing address ID",
       "providerStates": [
         {
-          "name": "Order DELETE: the address ID is correctly formatted"
-        }
-      ],
-      "request": {
-        "method": "DELETE",
-        "path": "/address/8aed8fad-d554-4af8-abf5-a65830b49a5f"
-      },
-      "response": {
-        "status": 204
-      }
-    },
-    {
-      "description": "A request to delete an address",
-      "providerStates": [
-        {
-          "name": "Order DELETE: the address ID is incorrectly formatted"
-        }
-      ],
-      "request": {
-        "method": "DELETE",
-        "path": "/address/this_is_not_a_valid_address_id"
-      },
-      "response": {
-        "status": 400
-      }
-    },
-    {
-      "description": "A request for address data",
-      "providerStates": [
-        {
-          "name": "Order GET: the address ID does not match an existing address"
+          "name": "Address with ID 00000000-0000-0000-0000-000000000000 does not exist"
         }
       ],
       "request": {
@@ -49,25 +19,10 @@
       }
     },
     {
-      "description": "A request for address data",
+      "description": "Retrieving a valid existing address ID",
       "providerStates": [
         {
-          "name": "Order GET: the address ID is incorrectly formatted"
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "path": "/address/this_is_not_a_valid_address_id"
-      },
-      "response": {
-        "status": 400
-      }
-    },
-    {
-      "description": "A request for address data",
-      "providerStates": [
-        {
-          "name": "Order GET: the address ID matches an existing address"
+          "name": "Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists"
         }
       ],
       "request": {
@@ -169,6 +124,51 @@
           }
         },
         "status": 200
+      }
+    },
+    {
+      "description": "Deleting a valid address ID",
+      "providerStates": [
+        {
+          "name": "No specific state required"
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "path": "/address/8aed8fad-d554-4af8-abf5-a65830b49a5f"
+      },
+      "response": {
+        "status": 204
+      }
+    },
+    {
+      "description": "Deleting an invalid address ID",
+      "providerStates": [
+        {
+          "name": "No specific state required"
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "path": "/address/this_is_not_a_valid_address_id"
+      },
+      "response": {
+        "status": 400
+      }
+    },
+    {
+      "description": "Retrieving an invalid address ID",
+      "providerStates": [
+        {
+          "name": "No specific state required"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/address/this_is_not_a_valid_address_id"
+      },
+      "response": {
+        "status": 400
       }
     }
   ],

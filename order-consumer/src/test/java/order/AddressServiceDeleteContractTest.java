@@ -29,8 +29,8 @@ public class AddressServiceDeleteContractTest {
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Order DELETE: the address ID is correctly formatted")
-                .uponReceiving("A request to delete an address")
+                        "No specific state required")
+                .uponReceiving("Deleting a valid address ID")
                 .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
@@ -42,8 +42,8 @@ public class AddressServiceDeleteContractTest {
     public RequestResponsePact pactForDeleteIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Order DELETE: the address ID is incorrectly formatted")
-                .uponReceiving("A request to delete an address")
+                        "No specific state required")
+                .uponReceiving("Deleting an invalid address ID")
                 .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()

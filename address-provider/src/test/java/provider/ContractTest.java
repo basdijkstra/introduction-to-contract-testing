@@ -36,43 +36,15 @@ public class ContractTest {
         context.verifyInteraction();
     }
 
-    @State("Customer GET: the address ID matches an existing address")
-    public void addressSuppliedByCustomerGETExists() {
+    @State("Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists")
+    public void addressWithIdExists() {
     }
 
-    @State("Customer GET: the address ID does not match an existing address")
-    public void addressSuppliedByCustomerGETDoesNotExist() {
+    @State("Address with ID 00000000-0000-0000-0000-000000000000 does not exist")
+    public void addressWithIdDoesNotExist() {
     }
 
-    @State("Customer GET: the address ID is incorrectly formatted")
-    public void addressSuppliedByCustomerGETIsIncorrectlyFormatted() {
-    }
-
-    @State("Customer DELETE: the address ID is correctly formatted")
-    public void addressSuppliedByCustomerDELETEIsCorrectlyFormatted() {
-    }
-
-    @State("Customer DELETE: the address ID is incorrectly formatted")
-    public void addressSuppliedByCustomerDELETEIsIncorrectlyFormatted() {
-    }
-
-    @State("Order GET: the address ID matches an existing address")
-    public void addressSuppliedByOrderGETExists() {
-    }
-
-    @State("Order GET: the address ID does not match an existing address")
-    public void addressSuppliedByOrderGETDoesNotExist() {
-    }
-
-    @State("Order GET: the address ID is incorrectly formatted")
-    public void addressSuppliedByOrderGETIsIncorrectlyFormatted() {
-    }
-
-    @State("Order DELETE: the address ID is correctly formatted")
-    public void addressSuppliedByOrderDELETEIsCorrectlyFormatted() {
-    }
-
-    @State("Order DELETE: the address ID is incorrectly formatted")
-    public void addressSuppliedByOrderDELETEIsIncorrectlyFormatted() {
+    @State("No specific state required")
+    public void noSpecificStateRequired() {
     }
 }

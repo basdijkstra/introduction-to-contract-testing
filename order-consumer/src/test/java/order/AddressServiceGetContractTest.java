@@ -40,8 +40,8 @@ public class AddressServiceGetContractTest {
         ).build();
 
         return builder.given(
-                        "Order GET: the address ID matches an existing address")
-                .uponReceiving("A request for address data")
+                String.format("Address with ID %s exists", Address.VALID_EXISTING_ADDRESS_ID))
+                .uponReceiving("Retrieving a valid existing address ID")
                 .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
@@ -54,8 +54,8 @@ public class AddressServiceGetContractTest {
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Order GET: the address ID does not match an existing address")
-                .uponReceiving("A request for address data")
+                String.format("Address with ID %s does not exist", Address.VALID_NON_EXISTING_ADDRESS_ID))
+                .uponReceiving("Retrieving a valid non-existing address ID")
                 .path(String.format("/address/%s", Address.VALID_NON_EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
@@ -67,8 +67,8 @@ public class AddressServiceGetContractTest {
     public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Order GET: the address ID is incorrectly formatted")
-                .uponReceiving("A request for address data")
+                "No specific state required")
+                .uponReceiving("Retrieving an invalid address ID")
                 .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()

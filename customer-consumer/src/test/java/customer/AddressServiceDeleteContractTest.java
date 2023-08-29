@@ -1,8 +1,6 @@
 package customer;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.LambdaDsl;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,8 +26,8 @@ public class AddressServiceDeleteContractTest {
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Customer DELETE: the address ID is correctly formatted")
-                .uponReceiving("A request to delete an address")
+                        "No specific state required")
+                .uponReceiving("Deleting a valid address ID")
                 .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
@@ -42,8 +39,8 @@ public class AddressServiceDeleteContractTest {
     public RequestResponsePact pactForDeleteIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                        "Customer DELETE: the address ID is incorrectly formatted")
-                .uponReceiving("A request to delete an address")
+                        "No specific state required")
+                .uponReceiving("Deleting an invalid address ID")
                 .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
