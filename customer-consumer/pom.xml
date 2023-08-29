@@ -23,6 +23,7 @@
     <java.version>17</java.version>
     <junit.version>5.9.2</junit.version>
     <pact.version>4.6.2</pact.version>
+    <pact.consumer.junit5.version>4.0.10</pact.consumer.junit5.version>
     <lombok.version>1.18.28</lombok.version>
   </properties>
 
@@ -63,7 +64,7 @@
     <dependency>
       <groupId>au.com.dius</groupId>
       <artifactId>pact-jvm-consumer-junit5</artifactId>
-      <version>${pact.maven.plugin.version}</version>
+      <version>${pact.consumer.junit5.version}</version>
       <scope>test</scope>
     </dependency>
 
