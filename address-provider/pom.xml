@@ -6,22 +6,22 @@
 
     <groupId>com.ontestautomation.cdct</groupId>
     <artifactId>address-provider</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.0</version>
+        <version>3.1.3</version>
         <relativePath/>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>14</java.version>
-        <pact.version>4.2.7</pact.version>
-        <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
-        <lombok.version>1.18.20</lombok.version>
+        <java.version>17</java.version>
+        <junit.version>5.9.2</junit.version>
+        <pact.version>4.4.6</pact.version>
+        <lombok.version>1.18.28</lombok.version>
     </properties>
 
     <dependencies>
@@ -37,16 +37,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.4.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -59,14 +52,7 @@
 
         <dependency>
             <groupId>au.com.dius.pact.provider</groupId>
-            <artifactId>junit</artifactId>
-            <version>${pact.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>au.com.dius.pact.provider</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>junit5spring</artifactId>
             <version>${pact.version}</version>
             <scope>test</scope>
         </dependency>
@@ -76,15 +62,14 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-maven</artifactId>
-                <version>${pact.maven.plugin.version}</version>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>${pact.version}</version>
                 <configuration>
                     <pactBrokerUrl>https://ota.pactflow.io</pactBrokerUrl>
                     <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>

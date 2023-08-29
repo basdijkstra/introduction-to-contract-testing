@@ -1,66 +1,50 @@
 package provider;
 
+import au.com.dius.pact.provider.junit5.HttpTestTarget;
+import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
-import au.com.dius.pact.provider.junitsupport.target.Target;
-import au.com.dius.pact.provider.junitsupport.target.TestTarget;
-import au.com.dius.pact.provider.spring.SpringRestPactRunner;
-import au.com.dius.pact.provider.spring.target.SpringBootHttpTarget;
-import org.junit.runner.RunWith;
+import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRestPactRunner.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("address_provider")
 @PactFolder("src/test/pacts")
 //@PactBroker(url="https://ota.pactflow.io", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ContractTest {
 
-    @TestTarget
-    public final Target target = new SpringBootHttpTarget();
+    @LocalServerPort
+    int port;
 
-    // The 'as-is' service is used for all provider states, so no additional setup is needed
-
-    @State("Customer GET: the address ID matches an existing address")
-    public void addressSuppliedByCustomerGETExists() {
+    @BeforeEach
+    public void setUp(PactVerificationContext context) {
+        context.setTarget(new HttpTestTarget("localhost", port));
     }
 
-    @State("Customer GET: the address ID does not match an existing address")
-    public void addressSuppliedByCustomerGETDoesNotExist() {
+    @TestTemplate
+    @ExtendWith(PactVerificationSpringProvider.class)
+    public void pactVerificationTestTemplate(PactVerificationContext context) {
+        context.verifyInteraction();
     }
 
-    @State("Customer GET: the address ID is incorrectly formatted")
-    public void addressSuppliedByCustomerGETIsIncorrectlyFormatted() {
+    @State("Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists")
+    public void addressWithIdExists() {
     }
 
-    @State("Customer DELETE: the address ID is correctly formatted")
-    public void addressSuppliedByCustomerDELETEIsCorrectlyFormatted() {
+    @State("Address with ID 00000000-0000-0000-0000-000000000000 does not exist")
+    public void addressWithIdDoesNotExist() {
     }
 
-    @State("Customer DELETE: the address ID is incorrectly formatted")
-    public void addressSuppliedByCustomerDELETEIsIncorrectlyFormatted() {
-    }
-
-    @State("Order GET: the address ID matches an existing address")
-    public void addressSuppliedByOrderExists() {
-    }
-
-    @State("Order GET: the address ID does not match an existing address")
-    public void addressSuppliedByOrderDoesNotExist() {
-    }
-
-    @State("Order GET: the address ID is incorrectly formatted")
-    public void addressSuppliedByOrderIsIncorrectlyFormatted() {
-    }
-
-    @State("Order DELETE: the address ID is correctly formatted")
-    public void addressSuppliedByOrderDELETEIsCorrectlyFormatted() {
-    }
-
-    @State("Order DELETE: the address ID is incorrectly formatted")
-    public void addressSuppliedByOrderDELETEIsIncorrectlyFormatted() {
+    @State("No specific state required")
+    public void noSpecificStateRequired() {
     }
 }

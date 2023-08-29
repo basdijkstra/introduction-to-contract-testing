@@ -1,77 +1,72 @@
 package customer;
 
+import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.consumer.junit.PactProviderRule;
-import au.com.dius.pact.consumer.junit.PactVerification;
+import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
+import au.com.dius.pact.consumer.junit5.PactTestFor;
+import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpClientErrorException;
-import java.util.UUID;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Request;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import java.io.IOException;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-        properties = "address_provider.base-url:http://localhost:${RANDOM_PORT}",
-        classes = AddressServiceClient.class)
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+@ExtendWith(PactConsumerTestExt.class)
+@PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
 public class AddressServiceDeleteContractTest {
 
-    private static final UUID ID = UUID.fromString("8aed8fad-d554-4af8-abf5-a65830b49a5f");
-
-    @Rule
-    public PactProviderRule provider = new PactProviderRule("address_provider", null,
-            RandomPort.getInstance().getPort(), this);
-
-    @Autowired
-    private AddressServiceClient addressServiceClient;
-
-
-    @Pact(consumer = "customer_consumer")
+    @Pact(provider = "address_provider", consumer = "customer_consumer")
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "Customer DELETE: the address ID is correctly formatted")
-                .uponReceiving("A request to delete an address")
-                .path(String.format("/address/%s", ID))
+                        "No specific state required")
+                .uponReceiving("Deleting a valid address ID")
+                .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
                 .status(204)
                 .toPact();
     }
 
-    @Pact(consumer = "customer_consumer")
+    @Pact(provider = "address_provider", consumer = "customer_consumer")
     public RequestResponsePact pactForDeleteIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                "Customer DELETE: the address ID is incorrectly formatted")
-                .uponReceiving("A request to delete an address")
-                .path("/address/this_is_not_a_valid_address_id")
+                        "No specific state required")
+                .uponReceiving("Deleting an invalid address ID")
+                .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
                 .status(400)
                 .toPact();
     }
 
-    @PactVerification(fragment = "pactForDeleteCorrectlyFormattedAddressId")
     @Test
-    public void testFor_DELETE_correctlyFormattedAddressId_shouldYieldHttp204() {
+    @PactTestFor(pactMethod = "pactForDeleteCorrectlyFormattedAddressId")
+    public void testFor_DELETE_correctlyFormattedAddressId_shouldYieldHttp204(MockServer mockServer) throws IOException {
 
-        addressServiceClient.deleteAddress(ID.toString());
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.VALID_EXISTING_ADDRESS_ID);
+
+        HttpResponse httpResponse = Request.Delete(endpoint).execute().returnResponse();
+
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(204)));
     }
 
-    @PactVerification(fragment = "pactForDeleteIncorrectlyFormattedAddressId")
     @Test
-    public void testFor_DELETE_incorrectlyFormattedAddressId_shouldYieldHttp400() {
+    @PactTestFor(pactMethod = "pactForDeleteIncorrectlyFormattedAddressId")
+    public void testFor_DELETE_incorrectlyFormattedAddressId_shouldYieldHttp400(MockServer mockServer) throws IOException {
 
-        assertThatThrownBy(
-                () -> addressServiceClient.deleteAddress("this_is_not_a_valid_address_id")
-        ).isInstanceOf(HttpClientErrorException.class)
-                .hasMessageContaining("400 Bad Request");
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.INVALID_ADDRESS_ID);
+
+        HttpResponse httpResponse = Request.Delete(endpoint).execute().returnResponse();
+
+        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }
 }
