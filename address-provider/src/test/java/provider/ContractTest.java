@@ -55,4 +55,24 @@ public class ContractTest {
     @State("Customer DELETE: the address ID is incorrectly formatted")
     public void addressSuppliedByCustomerDELETEIsIncorrectlyFormatted() {
     }
+
+    @State("Order GET: the address ID matches an existing address")
+    public void addressSuppliedByOrderGETExists() {
+    }
+
+    @State("Order GET: the address ID does not match an existing address")
+    public void addressSuppliedByOrderGETDoesNotExist() {
+    }
+
+    @State("Order GET: the address ID is incorrectly formatted")
+    public void addressSuppliedByOrderGETIsIncorrectlyFormatted() {
+    }
+
+    @State("Order DELETE: the address ID is correctly formatted")
+    public void addressSuppliedByOrderDELETEIsCorrectlyFormatted() {
+    }
+
+    @State("Order DELETE: the address ID is incorrectly formatted")
+    public void addressSuppliedByOrderDELETEIsIncorrectlyFormatted() {
+    }
 }
