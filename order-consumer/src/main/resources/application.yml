@@ -1,0 +1,4 @@
+address_provider:
+  base-url: "http://localhost:8090"
+payment_provider:
+  base-url: "http://localhost:8091"

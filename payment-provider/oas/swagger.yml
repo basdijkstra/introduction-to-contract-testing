@@ -1,0 +1,62 @@
+openapi: 3.0.1
+info:
+  title: Payment API
+  description: Payment API demo
+  version: 1.0.0
+paths:
+  /payment/{id}:
+    get:
+      summary: Get payment for order
+      description: Returns a single payment
+      operationId: getPaymentByOrderId
+      parameters:
+        - name: id
+          in: path
+          description: ID of order to get payment for
+          schema:
+            type: string
+          required: true
+          example: 228aa55c-393c-411b-9410-4a995480e78e
+      responses:
+        "200":
+          description: successful operation
+          content:
+            "application/json; charset=utf-8":
+              schema:
+                $ref: '#/components/schemas/Payment'
+              examples:
+                application/json:
+                  value:
+                    id: "8383a7c3-f831-4f4d-a0a9-015165148af5"
+                    orderid: "228aa55c-393c-411b-9410-4a995480e78e"
+                    status: "payment_complete"
+                    amount: 42
+                    description: "Payment for order 228aa55c-393c-411b-9410-4a995480e78e"
+        "400":
+          description: Invalid order ID supplied
+          content: {}
+        "404":
+          description: Order ID not found
+          content: {}
+components:
+  schemas:
+    Payment:
+      type: object
+      required:
+        - id
+        - orderId
+        - status
+        - amount
+        - description
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        status:
+          type: string
+        amount:
+          type: number
+        description:
+          type: string
