@@ -1,8 +1,6 @@
 package order;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.LambdaDsl;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +20,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressServiceDeleteContractTest {
+public class AddressIdServiceDeleteContractTest {
 
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
@@ -31,7 +28,7 @@ public class AddressServiceDeleteContractTest {
         return builder.given(
                         "No specific state required")
                 .uponReceiving("Deleting a valid address ID")
-                .path(String.format("/address/%s", Address.VALID_EXISTING_ADDRESS_ID))
+                .path(String.format("/address/%s", AddressId.VALID_EXISTING_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
                 .status(204)
@@ -44,7 +41,7 @@ public class AddressServiceDeleteContractTest {
         return builder.given(
                         "No specific state required")
                 .uponReceiving("Deleting an invalid address ID")
-                .path(String.format("/address/%s", Address.INVALID_ADDRESS_ID))
+                .path(String.format("/address/%s", AddressId.INVALID_ADDRESS_ID))
                 .method("DELETE")
                 .willRespondWith()
                 .status(400)
@@ -55,7 +52,7 @@ public class AddressServiceDeleteContractTest {
     @PactTestFor(pactMethod = "pactForDeleteCorrectlyFormattedAddressId")
     public void testFor_DELETE_correctlyFormattedAddressId_shouldYieldHttp204(MockServer mockServer) throws IOException {
 
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.VALID_EXISTING_ADDRESS_ID);
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.VALID_EXISTING_ADDRESS_ID);
 
         HttpResponse httpResponse = Request.Delete(endpoint).execute().returnResponse();
 
@@ -66,7 +63,7 @@ public class AddressServiceDeleteContractTest {
     @PactTestFor(pactMethod = "pactForDeleteIncorrectlyFormattedAddressId")
     public void testFor_DELETE_incorrectlyFormattedAddressId_shouldYieldHttp400(MockServer mockServer) throws IOException {
 
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), Address.INVALID_ADDRESS_ID);
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.INVALID_ADDRESS_ID);
 
         HttpResponse httpResponse = Request.Delete(endpoint).execute().returnResponse();
 
