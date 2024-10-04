@@ -4,8 +4,6 @@ import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.spring.junit5.PactVerificationSpringProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Provider("address_provider")
 @PactFolder("src/test/pacts")
 //@PactBroker(url="https://ota.pactflow.io", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
-public class ContractTest {
+public class ContractVerificationTest {
 
     @LocalServerPort
     int port;
