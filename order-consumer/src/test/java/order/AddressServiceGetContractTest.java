@@ -66,7 +66,7 @@ public class AddressServiceGetContractTest {
 
     @Test
     @PactTestFor(pactMethod = "pactForGetExistingAddressId")
-    public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) throws IOException {
+    public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) {
 
         AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
 
@@ -77,12 +77,10 @@ public class AddressServiceGetContractTest {
 
     @Test
     @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
-    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
+    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) {
 
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.NON_EXISTING_ADDRESS_ID);
+        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
 
-        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
-
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));
+        Assertions.assertThrows(NotFoundException.class, () -> client.getAddress(AddressId.NON_EXISTING_ADDRESS_ID));
     }
 }

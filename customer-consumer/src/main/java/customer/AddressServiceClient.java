@@ -1,6 +1,5 @@
-package order;
+package customer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ public class AddressServiceClient {
 
     public AddressServiceClient(@Value("${address_provider.base-url}") String baseUrl) {
         this.restTemplate = new RestTemplateBuilder()
-                .errorHandler(new AddressErrorHandler())
                 .rootUri(baseUrl)
                 .defaultHeader("Connection", "close")
                 .build();

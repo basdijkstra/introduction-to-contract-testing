@@ -15,6 +15,7 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -36,7 +37,7 @@ public class AddressServiceGetContractTest {
          *  (for the last one, have a look at https://docs.pact.io/implementation_guides/jvm/consumer#dsl-matching-methods for a hint)
          */
         DslPart body = LambdaDsl.newJsonBody((o) -> o
-                .uuid("id", UUID.fromString(AddressId.VALID_EXISTING_ADDRESS_ID))
+                .uuid("id", UUID.fromString(AddressId.EXISTING_ADDRESS_ID))
                 .stringType("addressType", "billing")
                 .stringType("street", "Main Street")
                 .integerType("number", 123)
@@ -44,9 +45,9 @@ public class AddressServiceGetContractTest {
         ).build();
 
         return builder.given(
-                String.format("Address with ID %s exists", AddressId.VALID_EXISTING_ADDRESS_ID))
-                .uponReceiving("Retrieving a valid existing address ID")
-                .path(String.format("/address/%s", AddressId.VALID_EXISTING_ADDRESS_ID))
+                String.format("Address with ID %s exists", AddressId.EXISTING_ADDRESS_ID))
+                .uponReceiving("Retrieving an existing address ID")
+                .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(200)
@@ -54,62 +55,43 @@ public class AddressServiceGetContractTest {
                 .toPact();
     }
 
-    @Pact(provider = "address_provider", consumer = "customer_consumer")
-    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
-
-        return builder.given(
-                String.format("Address with ID %s does not exist", AddressId.VALID_NON_EXISTING_ADDRESS_ID))
-                .uponReceiving("Retrieving a valid non-existing address ID")
-                .path(String.format("/address/%s", AddressId.VALID_NON_EXISTING_ADDRESS_ID))
-                .method("GET")
-                .willRespondWith()
-                .status(404)
-                .toPact();
-    }
-
-    @Pact(provider = "address_provider", consumer = "customer_consumer")
-    public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
-
-        return builder.given(
-                "No specific state required")
-                .uponReceiving("Retrieving an invalid address ID")
-                .path(String.format("/address/%s", AddressId.INVALID_ADDRESS_ID))
-                .method("GET")
-                .willRespondWith()
-                .status(400)
-                .toPact();
-    }
+    /**
+     * TODO: uncomment the pactForGetNonExistentAddressId() method and complete its implementation by:
+     *   - removing the 'return null;' statement from the code
+     *   - specifying that a GET to /address/00000000-0000-0000-0000-000000000000 is to be performed
+     *   - specifying that this request should return an HTTP 404
+     *   - generating a pact segment from these expectations and returning that
+     *   You should use a provider state with the exact name 'Address with ID 00000000-0000-0000-0000-000000000000 does not exist'
+     *   The implementation is very similar to the one above, but does not need the body() part as we don't expect
+     *   the provider to return a response body in this situation.
+     */
+//    @Pact(provider = "address_provider", consumer = "customer_consumer")
+//    public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
+//
+//        return null;
+//    }
 
     @Test
     @PactTestFor(pactMethod = "pactForGetExistingAddressId")
-    public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) throws IOException {
+    public void testFor_GET_existingAddressId_shouldYieldExpectedAddressData(MockServer mockServer) {
 
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.VALID_EXISTING_ADDRESS_ID);
+        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
 
-        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
+        Address address = client.getAddress(AddressId.EXISTING_ADDRESS_ID);
 
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(200)));
+        Assertions.assertEquals(AddressId.EXISTING_ADDRESS_ID, address.getId());
     }
 
-    @Test
-    @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
-    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
-
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.VALID_NON_EXISTING_ADDRESS_ID);
-
-        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
-
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "pactForGetIncorrectlyFormattedAddressId")
-    public void testFor_GET_incorrectlyFormattedAddressId_shouldYieldHttp400(MockServer mockServer) throws IOException {
-
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.INVALID_ADDRESS_ID);
-
-        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
-
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
-    }
+    /**
+     * TODO: uncomment the test method and complete its implementation by:
+     *   - creating a new instance of the AddressServiceClient that invokes the mockServer URL
+     *       (see the test above for an example)
+     *   - calling the getAddress() method on the client, passing in "00000000-0000-0000-0000-000000000000" as the address ID
+     */
+//    @Test
+//    @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
+//    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
+//
+//
+//    }
 }
