@@ -83,15 +83,15 @@ public class AddressServiceGetContractTest {
     }
 
     /**
-     * TODO: uncomment the test method and complete its implementation by:
-     *   - creating a new instance of the AddressServiceClient that invokes the mockServer URL
-     *       (see the test above for an example)
-     *   - calling the getAddress() method on the client, passing in "00000000-0000-0000-0000-000000000000" as the address ID
+     * TODO: uncomment the test method after completion of the pactForGetNonExistentAddressId()
+     *   method to add this interaction to the contract for the customer_consumer
      */
 //    @Test
 //    @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
-//    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
+//    public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) {
 //
+//        AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
 //
+//        Assertions.assertThrows(NotFoundException.class, () -> client.getAddress(AddressId.NON_EXISTING_ADDRESS_ID));
 //    }
 }

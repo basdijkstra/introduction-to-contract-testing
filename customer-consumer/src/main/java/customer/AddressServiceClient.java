@@ -12,6 +12,7 @@ public class AddressServiceClient {
 
     public AddressServiceClient(@Value("${address_provider.base-url}") String baseUrl) {
         this.restTemplate = new RestTemplateBuilder()
+                .errorHandler(new AddressErrorHandler())
                 .rootUri(baseUrl)
                 .defaultHeader("Connection", "close")
                 .build();
