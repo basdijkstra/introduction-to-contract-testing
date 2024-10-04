@@ -24,26 +24,26 @@ import java.util.UUID;
 
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "address_provider", pactVersion = PactSpecVersion.V3)
-public class AddressIdServiceGetContractTest {
+public class AddressServiceGetContractTest {
 
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForGetExistingAddressId(PactDslWithProvider builder) {
 
         DslPart body = LambdaDsl.newJsonBody((o) -> o
-                .uuid("id", UUID.fromString(AddressId.VALID_EXISTING_ADDRESS_ID))
+                .uuid("id", UUID.fromString(AddressId.EXISTING_ADDRESS_ID))
                 .stringType("addressType", "billing")
                 .stringType("street", "Main Street")
                 .integerType("number", 123)
                 .stringType("city", "Nothingville")
                 .integerType("zipCode", 54321)
                 .stringType("state", "Tennessee")
-                .stringType("country", "United States")
+                .stringMatcher("country", "United States|Canada", "United States")
         ).build();
 
         return builder.given(
-                String.format("Address with ID %s exists", AddressId.VALID_EXISTING_ADDRESS_ID))
-                .uponReceiving("Retrieving a valid existing address ID")
-                .path(String.format("/address/%s", AddressId.VALID_EXISTING_ADDRESS_ID))
+                String.format("Address with ID %s exists", AddressId.EXISTING_ADDRESS_ID))
+                .uponReceiving("Retrieving an existing address ID")
+                .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(200)
@@ -55,25 +55,12 @@ public class AddressIdServiceGetContractTest {
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
         return builder.given(
-                String.format("Address with ID %s does not exist", AddressId.VALID_NON_EXISTING_ADDRESS_ID))
-                .uponReceiving("Retrieving a valid non-existing address ID")
-                .path(String.format("/address/%s", AddressId.VALID_NON_EXISTING_ADDRESS_ID))
+                String.format("Address with ID %s does not exist", AddressId.NON_EXISTING_ADDRESS_ID))
+                .uponReceiving("Retrieving an address ID that does not exist")
+                .path(String.format("/address/%s", AddressId.NON_EXISTING_ADDRESS_ID))
                 .method("GET")
                 .willRespondWith()
                 .status(404)
-                .toPact();
-    }
-
-    @Pact(provider = "address_provider", consumer = "order_consumer")
-    public RequestResponsePact pactForGetIncorrectlyFormattedAddressId(PactDslWithProvider builder) {
-
-        return builder.given(
-                "No specific state required")
-                .uponReceiving("Retrieving an invalid address ID")
-                .path(String.format("/address/%s", AddressId.INVALID_ADDRESS_ID))
-                .method("GET")
-                .willRespondWith()
-                .status(400)
                 .toPact();
     }
 
@@ -83,30 +70,19 @@ public class AddressIdServiceGetContractTest {
 
         AddressServiceClient client = new AddressServiceClient(mockServer.getUrl());
 
-        Address address = client.getAddress(AddressId.VALID_EXISTING_ADDRESS_ID);
+        Address address = client.getAddress(AddressId.EXISTING_ADDRESS_ID);
 
-        Assertions.assertEquals(AddressId.VALID_EXISTING_ADDRESS_ID, address.getId().toString());
+        Assertions.assertEquals(AddressId.EXISTING_ADDRESS_ID, address.getId());
     }
 
     @Test
     @PactTestFor(pactMethod = "pactForGetNonExistentAddressId")
     public void testFor_GET_nonExistentAddressId_shouldYieldHttp404(MockServer mockServer) throws IOException {
 
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.VALID_NON_EXISTING_ADDRESS_ID);
+        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.NON_EXISTING_ADDRESS_ID);
 
         HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
 
         assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(404)));
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "pactForGetIncorrectlyFormattedAddressId")
-    public void testFor_GET_incorrectlyFormattedAddressId_shouldYieldHttp400(MockServer mockServer) throws IOException {
-
-        String endpoint = String.format("%s/address/%s", mockServer.getUrl(), AddressId.INVALID_ADDRESS_ID);
-
-        HttpResponse httpResponse = Request.Get(endpoint).execute().returnResponse();
-
-        assertThat(httpResponse.getStatusLine().getStatusCode(), is(equalTo(400)));
     }
 }

@@ -12,9 +12,4 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleNotFound() {
     }
-    
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleBadRequest() {
-    }
 }

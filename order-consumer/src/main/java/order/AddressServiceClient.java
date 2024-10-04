@@ -20,4 +20,8 @@ public class AddressServiceClient {
     public Address getAddress(String addressId) {
         return restTemplate.getForObject(String.format("/address/%s", addressId), Address.class);
     }
+
+    public void deleteAddress(String addressId) {
+        restTemplate.delete(String.format("/address/%s", addressId));
+    }
 }

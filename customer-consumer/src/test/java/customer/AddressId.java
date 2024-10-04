@@ -1,6 +1,6 @@
 package customer;
 
-public class Address {
+public class AddressId {
 
     public static final String VALID_EXISTING_ADDRESS_ID = "8aed8fad-d554-4af8-abf5-a65830b49a5f";
     public static final String VALID_NON_EXISTING_ADDRESS_ID = "00000000-0000-0000-0000-000000000000";

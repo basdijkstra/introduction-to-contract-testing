@@ -4,7 +4,7 @@
   },
   "interactions": [
     {
-      "description": "Retrieving a valid non-existing address ID",
+      "description": "Retrieving an address ID that does not exist",
       "providerStates": [
         {
           "name": "Address with ID 00000000-0000-0000-0000-000000000000 does not exist"
@@ -19,7 +19,7 @@
       }
     },
     {
-      "description": "Retrieving a valid existing address ID",
+      "description": "Retrieving an existing address ID",
       "providerStates": [
         {
           "name": "Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists"
@@ -65,7 +65,8 @@
               "combine": "AND",
               "matchers": [
                 {
-                  "match": "type"
+                  "match": "regex",
+                  "regex": "United States|Canada"
                 }
               ]
             },
@@ -127,7 +128,7 @@
       }
     },
     {
-      "description": "Deleting a valid address ID",
+      "description": "Deleting an address ID",
       "providerStates": [
         {
           "name": "No specific state required"
@@ -140,41 +141,11 @@
       "response": {
         "status": 204
       }
-    },
-    {
-      "description": "Deleting an invalid address ID",
-      "providerStates": [
-        {
-          "name": "No specific state required"
-        }
-      ],
-      "request": {
-        "method": "DELETE",
-        "path": "/address/this_is_not_a_valid_address_id"
-      },
-      "response": {
-        "status": 400
-      }
-    },
-    {
-      "description": "Retrieving an invalid address ID",
-      "providerStates": [
-        {
-          "name": "No specific state required"
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "path": "/address/this_is_not_a_valid_address_id"
-      },
-      "response": {
-        "status": 400
-      }
     }
   ],
   "metadata": {
     "pact-jvm": {
-      "version": "4.6.2"
+      "version": "4.6.14"
     },
     "pactSpecification": {
       "version": "3.0.0"

@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data @NoArgsConstructor
 public class Address {
 
-    private UUID id;
+    private String id;
     private String addressType;
     private String street;
     private int number;
