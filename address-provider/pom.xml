@@ -66,19 +66,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>au.com.dius.pact.provider</groupId>
-                <artifactId>maven</artifactId>
-                <version>${pact.version}</version>
-                <configuration>
-                    <pactBrokerUrl>https://ota.pactflow.io</pactBrokerUrl>
-                    <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>
-                    <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
