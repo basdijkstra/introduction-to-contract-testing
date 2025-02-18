@@ -81,8 +81,8 @@
         <artifactId>maven</artifactId>
         <version>${pact.version}</version>
         <configuration>
-          <pactBrokerUrl>https://ota.pactflow.io</pactBrokerUrl>
-          <pactBrokerToken>HbtH0tZq7CU4d18JlKR2kA</pactBrokerToken>
+          <pactBrokerUrl>${env.PACT_BROKER_BASE_URL}</pactBrokerUrl>
+          <pactBrokerToken>${env.PACT_BROKER_TOKEN}</pactBrokerToken>
           <pactBrokerAuthenticationScheme>Bearer</pactBrokerAuthenticationScheme>
         </configuration>
       </plugin>
