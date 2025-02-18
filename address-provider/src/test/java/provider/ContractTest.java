@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("address_provider")
 //@PactFolder("src/test/pacts")
-@PactBroker(url="https://ota.pactflow.io", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
+@PactBroker(url="${PACT_BROKER_BASE_URL}", authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
 public class ContractTest {
 
     @LocalServerPort
