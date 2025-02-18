@@ -15,11 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Map;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("address_provider")
-@PactFolder("src/test/pacts")
-//@PactBroker(url="https://ota.pactflow.io", authentication = @PactBrokerAuth(token = "HbtH0tZq7CU4d18JlKR2kA"))
+//@PactFolder("src/test/pacts")
+@PactBroker(url="${PACT_BROKER_BASE_URL}", authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
 public class ContractVerificationTest {
 
     @LocalServerPort
@@ -36,12 +38,12 @@ public class ContractVerificationTest {
         context.verifyInteraction();
     }
 
-    @State("Address with ID 8aed8fad-d554-4af8-abf5-a65830b49a5f exists")
-    public void addressWithIdExists() {
+    @State("Address exists")
+    public void addressWithIdExists(Map<String, Object> providerStateParams) {
     }
 
-    @State("Address with ID 00000000-0000-0000-0000-000000000000 does not exist")
-    public void addressWithIdDoesNotExist() {
+    @State("Address does not exist")
+    public void addressWithIdDoesNotExist(Map<String, Object> providerStateParams) {
     }
 
     @State("No specific state required")

@@ -1,9 +1,5 @@
 package order;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.LambdaDsl;
@@ -13,13 +9,11 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @ExtendWith(PactConsumerTestExt.class)
@@ -40,8 +34,9 @@ public class AddressServiceGetContractTest {
                 .stringMatcher("country", "United States|Canada", "United States")
         ).build();
 
-        return builder.given(
-                String.format("Address with ID %s exists", AddressId.EXISTING_ADDRESS_ID))
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.EXISTING_ADDRESS_ID);
+
+        return builder.given("Address exists", providerStateParams)
                 .uponReceiving("Retrieving an existing address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("GET")
@@ -54,8 +49,10 @@ public class AddressServiceGetContractTest {
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForGetNonExistentAddressId(PactDslWithProvider builder) {
 
-        return builder.given(
-                String.format("Address with ID %s does not exist", AddressId.NON_EXISTING_ADDRESS_ID))
+        Map<String, Object> providerStateParams = Map.of("addressId", AddressId.NON_EXISTING_ADDRESS_ID);
+
+        return builder
+                .given("Address does not exist", providerStateParams)
                 .uponReceiving("Retrieving an address ID that does not exist")
                 .path(String.format("/address/%s", AddressId.NON_EXISTING_ADDRESS_ID))
                 .method("GET")

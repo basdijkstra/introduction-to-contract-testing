@@ -18,8 +18,8 @@ public class AddressServiceDeleteContractTest {
     @Pact(provider = "address_provider", consumer = "order_consumer")
     public RequestResponsePact pactForDeleteCorrectlyFormattedAddressId(PactDslWithProvider builder) {
 
-        return builder.given(
-                        "No specific state required")
+        return builder
+                .given("No specific state required")
                 .uponReceiving("Deleting an address ID")
                 .path(String.format("/address/%s", AddressId.EXISTING_ADDRESS_ID))
                 .method("DELETE")
